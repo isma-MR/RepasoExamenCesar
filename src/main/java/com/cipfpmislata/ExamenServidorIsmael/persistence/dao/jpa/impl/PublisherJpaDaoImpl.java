@@ -6,8 +6,8 @@ import java.util.Optional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-import com.cipfpmislata.ExamenServidorIsmael.domain.service.dto.PublisherDto;
 import com.cipfpmislata.ExamenServidorIsmael.persistence.dao.PublisherJpaDao;
+import com.cipfpmislata.ExamenServidorIsmael.persistence.dao.jpa.entity.BookJpaEntity;
 import com.cipfpmislata.ExamenServidorIsmael.persistence.dao.jpa.entity.PublisherJpaEntity;
 
 public class PublisherJpaDaoImpl implements PublisherJpaDao {
@@ -23,8 +23,15 @@ public class PublisherJpaDaoImpl implements PublisherJpaDao {
 
     @Override
     public Optional<PublisherJpaEntity> findPublisherBySlug(String slug) {
-        PublisherJpaEntity publisherJpaEntity = entityManager.find(PublisherJpaEntity.class, slug);
-        return Optional.ofNullable(publisherJpaEntity);
+        try {
+            PublisherJpaEntity publisherJpaEntity = entityManager
+                    .createQuery("SELECT p FROM PublisherJpaEntity p WHERE p.slug = :slug", PublisherJpaEntity.class)
+                    .setParameter("slug", slug)
+                    .getSingleResult();
+            return Optional.of(publisherJpaEntity);
+        } catch (jakarta.persistence.NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -49,6 +56,11 @@ public class PublisherJpaDaoImpl implements PublisherJpaDao {
     @Override
     public void delete(Long id) {
         PublisherJpaEntity publisherJpaEntity = entityManager.find(PublisherJpaEntity.class, id);
+        BookJpaEntity book = entityManager
+                .createQuery("SELECT b FROM BookJpaEntity b WHERE b.publisher.id = :id", BookJpaEntity.class)
+                .setParameter("id", id)
+                .getSingleResult();
+        entityManager.remove(book);
         entityManager.remove(publisherJpaEntity);
     }
 

@@ -22,8 +22,10 @@ public class AuthorJpaDaoImpl implements AuthorJpaDao {
 
     @Override
     public Optional<AuthorJpaEntity> findAuthorBySlug(String slug) {
-        AuthorJpaEntity authorJpaEntity = entityManager.find(AuthorJpaEntity.class, slug);
-        return Optional.ofNullable(authorJpaEntity);
+        return Optional.ofNullable(
+                entityManager.createQuery("SELECT a FROM AuthorJpaEntity a WHERE a.slug = :slug", AuthorJpaEntity.class)
+                        .setParameter("slug", slug)
+                        .getSingleResult());
     }
 
     @Override
@@ -48,8 +50,10 @@ public class AuthorJpaDaoImpl implements AuthorJpaDao {
     @Override
     public void delete(Long id) {
         AuthorJpaEntity authorJpaEntity = entityManager.find(AuthorJpaEntity.class, id);
+        entityManager.createQuery("DELETE FROM BookAuthorJpaEntity ba WHERE ba.author.id = :id")
+                .setParameter("id", id)
+                .executeUpdate();
         entityManager.remove(authorJpaEntity);
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }
 
 }

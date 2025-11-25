@@ -51,6 +51,7 @@ public class BookJpaDaoImpl implements BookJpaDao {
 
     @Override
     public BookJpaEntity update(BookJpaEntity bookJpaEntity) {
+
         entityManager.flush();
         entityManager.merge(bookJpaEntity);
         return bookJpaEntity;

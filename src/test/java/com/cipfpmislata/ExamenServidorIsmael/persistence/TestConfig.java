@@ -31,7 +31,7 @@ public class TestConfig {
     }
 
     @Bean
-    public AuthorJpaDao authorJpaDao(EntityManager entityManager) {
+    public AuthorJpaDao authorJpaDao() {
         return new AuthorJpaDaoImpl();
     }
 
