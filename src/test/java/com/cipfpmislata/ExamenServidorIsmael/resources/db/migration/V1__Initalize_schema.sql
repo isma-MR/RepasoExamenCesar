@@ -1,0 +1,29 @@
+CREATE TABLE publisher (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE author (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE book (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title_es VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL,
+    publisher_id BIGINT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    isbn VARCHAR(255) NOT NULL,
+    FOREIGN KEY (publisher_id) REFERENCES publisher(id)
+);
+
+CREATE TABLE book_author (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    book_id BIGINT NOT NULL,
+    author_id BIGINT NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES book(id),
+    FOREIGN KEY (author_id) REFERENCES author(id)
+);

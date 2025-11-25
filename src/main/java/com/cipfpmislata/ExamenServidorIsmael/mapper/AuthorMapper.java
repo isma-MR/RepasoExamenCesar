@@ -2,12 +2,14 @@ package com.cipfpmislata.ExamenServidorIsmael.mapper;
 
 import com.cipfpmislata.ExamenServidorIsmael.domain.model.Author;
 import com.cipfpmislata.ExamenServidorIsmael.domain.service.dto.AuthorDto;
+import com.cipfpmislata.ExamenServidorIsmael.persistence.dao.jpa.entity.AuthorJpaEntity;
 
 public class AuthorMapper {
 
-    private  static AuthorMapper instance;
+    private static AuthorMapper instance;
 
-    private AuthorMapper() {}
+    private AuthorMapper() {
+    }
 
     public static AuthorMapper getInstance() {
         if (instance == null) {
@@ -23,8 +25,7 @@ public class AuthorMapper {
         return new AuthorDto(
                 author.getId(),
                 author.getName(),
-                author.getSlug()
-        );
+                author.getSlug());
     }
 
     public Author fromAuthorDtoToAuthor(AuthorDto authorDto) {
@@ -34,8 +35,27 @@ public class AuthorMapper {
         return new Author(
                 authorDto.id(),
                 authorDto.name(),
-                authorDto.slug()
-        );
+                authorDto.slug());
+    }
+
+    public AuthorDto fromAuthorJpaEntityToAuthorDto(AuthorJpaEntity authorJpaEntity) {
+        if (authorJpaEntity == null) {
+            return null;
+        }
+        return new AuthorDto(
+                authorJpaEntity.getId(),
+                authorJpaEntity.getName(),
+                authorJpaEntity.getSlug());
+    }
+
+    public AuthorJpaEntity fromAuthorDtoToAuthorJpaEntity(AuthorDto authorDto) {
+        if (authorDto == null) {
+            return null;
+        }
+        return new AuthorJpaEntity(
+                authorDto.id(),
+                authorDto.name(),
+                authorDto.slug());
     }
 
 }

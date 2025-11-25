@@ -6,8 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PublisherRepository {
-    List<PublisherDto> findAll(int page, int size);
+    List<PublisherDto> findAll();
+
+    Optional<PublisherDto> findById(Long id);
+
     Optional<PublisherDto> findBySlug(String slug);
+
     PublisherDto save(PublisherDto publisherDto);
-    void delete(String slug);
+
+    void delete(Long id);
 }

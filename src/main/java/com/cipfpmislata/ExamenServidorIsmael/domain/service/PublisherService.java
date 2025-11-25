@@ -6,9 +6,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PublisherService {
-    List<PublisherDto> findAll(int page, int size);
+    List<PublisherDto> findAll();
+
+    Optional<PublisherDto> findById(Long id);
+
     Optional<PublisherDto> findBySlug(String slug);
+
     PublisherDto create(PublisherDto publisherDto);
+
     PublisherDto update(PublisherDto publisherDto);
-    void delete(String slug);
+
+    void delete(Long id);
 }

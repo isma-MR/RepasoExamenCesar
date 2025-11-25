@@ -7,7 +7,12 @@ import java.util.Optional;
 
 public interface BookRepository {
     Page<BookDto> findAll(int page, int size);
+
     Optional<BookDto> findByIsbn(String isbn);
+
+    Optional<BookDto> findById(Long id);
+
     BookDto save(BookDto bookDto);
+
     void deleteByIsbn(String isbn);
 }

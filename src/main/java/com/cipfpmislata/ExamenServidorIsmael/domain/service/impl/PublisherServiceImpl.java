@@ -4,6 +4,7 @@ import com.cipfpmislata.ExamenServidorIsmael.domain.model.Publisher;
 import com.cipfpmislata.ExamenServidorIsmael.domain.repository.PublisherRepository;
 import com.cipfpmislata.ExamenServidorIsmael.domain.service.PublisherService;
 import com.cipfpmislata.ExamenServidorIsmael.domain.service.dto.PublisherDto;
+import com.cipfpmislata.ExamenServidorIsmael.exception.BusinessException;
 import com.cipfpmislata.ExamenServidorIsmael.exception.ResourceNotFoundException;
 
 import java.util.List;
@@ -18,18 +19,25 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
-    public List<PublisherDto> findAll(int page, int size) {
-        if(page < 1 || size < 1) {
-            throw new IllegalArgumentException("Page and size must be greater than 0");
-        }
-        return publisherRepository.findAll(page, size);
+    public List<PublisherDto> findAll() {
+        return publisherRepository.findAll();
     }
 
     @Override
     public Optional<PublisherDto> findBySlug(String slug) {
         Optional<PublisherDto> publisher = publisherRepository.findBySlug(slug);
         if (publisher.isEmpty()) {
-            throw   new ResourceNotFoundException("Publisher not found");
+            throw new ResourceNotFoundException("Publisher not found");
+        } else {
+            return publisher;
+        }
+    }
+
+    @Override
+    public Optional<PublisherDto> findById(Long id) {
+        Optional<PublisherDto> publisher = publisherRepository.findById(id);
+        if (publisher.isEmpty()) {
+            throw new ResourceNotFoundException("Publisher not found");
         } else {
             return publisher;
         }
@@ -41,7 +49,7 @@ public class PublisherServiceImpl implements PublisherService {
         if (publisher.isEmpty()) {
             return publisherRepository.save(publisherDto);
         } else {
-            throw new  ResourceNotFoundException("Publisher not found");
+            throw new BusinessException("Publisher already exists");
         }
     }
 
@@ -49,19 +57,19 @@ public class PublisherServiceImpl implements PublisherService {
     public PublisherDto update(PublisherDto publisherDto) {
         Optional<PublisherDto> publisher = publisherRepository.findBySlug(publisherDto.slug());
         if (publisher.isEmpty()) {
-            throw  new ResourceNotFoundException("Publisher not found");
+            throw new ResourceNotFoundException("Publisher not found");
         } else {
             return publisherRepository.save(publisherDto);
         }
     }
 
     @Override
-    public void delete(String slug) {
-        Optional<PublisherDto> publisher = publisherRepository.findBySlug(slug);
+    public void delete(Long id) {
+        Optional<PublisherDto> publisher = publisherRepository.findById(id);
         if (publisher.isEmpty()) {
-            publisherRepository.delete(slug);
+            throw new ResourceNotFoundException("Publisher not found");
         } else {
-            throw  new  ResourceNotFoundException("Publisher not found");
+            publisherRepository.delete(id);
         }
     }
 }
