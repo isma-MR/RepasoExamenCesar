@@ -13,7 +13,6 @@ CREATE TABLE author (
 CREATE TABLE book (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     title_es VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL,
     publisher_id BIGINT NOT NULL,
     price DECIMAL(10,2) NOT NULL,
     isbn VARCHAR(255) NOT NULL,
